@@ -134,9 +134,9 @@ do
         case "2":
             // #1 Display all dogs with a multiple search characteristics
 
-            string dogCharacteristics = "";
+            string dogCharacteristics = String.Empty; // better than ""
 
-            while (dogCharacteristics == "")
+            while (dogCharacteristics == String.Empty)
             {
                 // #2 have user enter multiple comma separated characteristics to search for
                 Console.WriteLine($"\nEnter dog characteristics to search for separated by commas");

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.PortableExecutable;
 
 // ourAnimals array will store the following: 
 string animalSpecies = "";
@@ -18,11 +19,23 @@ decimal decimalDonation = 0.00m;
 
 // array used to store runtime data
 string[,] ourAnimals = new string[maxPets, 7];
+// reference type initialize to null reference
+// value type initialize to default value, 0 .1.1.1 for date
+// int[] test = new int[5];
+// Console.WriteLine(test[3]);
+// int i = 0; // to reader, not clear whether varaible is actually 0 or just default value waiting to be changed
+// int j = default; // both will be initialized to 0
+
+//Console.WriteLine(ourAnimals[3, 3]?.Length); // this says if it does not return null, return this. Easier than below // called elvis aka null condition operator, used to access members only if variable is not null
+// if (ourAnimals[3, 3] is not null)
+    // Console.WriteLine(ourAnimals[3, 3].Length);
+// 3D array, string[,,] students = new string [50, 100, 1000];
+// students[0, 3, 100];
 
 // sample data ourAnimals array entries
 for (int i = 0; i < maxPets; i++)
 {
-    switch (i)
+    switch (i) // switch in this form is an equality comparison, case 0 is when i = 0
     {
         case 0:
             animalSpecies = "dog";
@@ -32,7 +45,7 @@ for (int i = 0; i < maxPets; i++)
             animalPersonalityDescription = "loves to have her belly rubbed and likes to chase her tail. gives lots of kisses.";
             animalNickname = "lola";
             suggestedDonation = "85.00";
-            break;
+            break; // pauses code and goes to end of the code block. in C# case needs to end in break otherwise you 'fall through' to another case
 
         case 1:
             animalSpecies = "dog";
@@ -102,10 +115,10 @@ do
     Console.WriteLine();
     Console.WriteLine("Enter your selection number (or type Exit to exit the program)");
 
-    readResult = Console.ReadLine();
+    readResult = Console.ReadLine(); // note data type read from console is string by default
     if (readResult != null)
     {
-        menuSelection = readResult.ToLower();
+        menuSelection = readResult?.ToLower();
     }
 
     // switch-case to process the selected menu option
@@ -150,6 +163,7 @@ do
 
             bool noMatchesDog = true;
             string dogDescription = "";
+            bool atLeast1Match = false;
             
             // #4 update to "rotating" animation with countdown
             string[] searchingIcons = {" |", " /", "--", "\\", " *"};
@@ -181,26 +195,51 @@ do
                     foreach (var characteristic in arrayDogCharacteristic)
                     {
 
+
                         if (dogDescription.Contains(characteristic))
                         {
                             // #3b update message to reflect term
-                            Console.WriteLine($"Searching for {characteristic}");
+                            //Console.WriteLine($"Searching for {characteristic}");
                             // #3c set a flag "this dog" is a match
-                            Console.WriteLine($"\nOur dog {ourAnimals[i, 3]} is a match for {characteristic}!");
+                            Console.WriteLine($"Our dog {ourAnimals[i, 3]} is a match for {characteristic}!");
+
+
 
                             noMatchesDog = false;
+                            atLeast1Match = true;
+
                         }
+                        
+                        
                     }
 
+                    if (atLeast1Match)
+                    {
+                        Console.WriteLine($"{ourAnimals[i, 3]} ({ourAnimals[i, 0]})");
+                        Console.WriteLine($"{ourAnimals[i, 4]}");
+                        Console.WriteLine($"{ourAnimals[i, 5]}");
+                        Console.WriteLine($"\n");
+                        atLeast1Match = false;
+
+                    }
+
+
                     // #3d if "this dog" is match write match message + dog description
-                    
+                    //Console.WriteLine($"{ourAnimals[i, 3]} ({ourAnimals[i, 0]})");
+                    //Console.WriteLine($"{ourAnimals[i, 4]}");
+                    //Console.WriteLine($"{ourAnimals[i, 5]}");
+                    //Console.WriteLine($"\n");
                 }
             }
-
             if (noMatchesDog)
             {
-                Console.WriteLine("None of our dogs are a match found for: " + dogCharacteristic);
+                Console.WriteLine("None of our dogs are a match found for: " + String.Join(",", arrayDogCharacteristic));
+
             }
+            //if (noMatchesDog)
+            //{
+            //    Console.WriteLine("None of our dogs are a match found for: " + dogCharacteristic);
+            //}
 
             Console.WriteLine("\n\rPress the Enter key to continue");
             readResult = Console.ReadLine();
