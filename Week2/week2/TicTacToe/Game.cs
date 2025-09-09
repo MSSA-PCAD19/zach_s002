@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TicTacToe
 {
     // class access modifier public/internal
-    internal class Game
+    internal static class Game // adding the static means every member must be static
     {
         // body of class Game
         // field, property, METHOD, event - collectively known as class member
