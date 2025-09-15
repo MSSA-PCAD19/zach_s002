@@ -9,6 +9,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeckLibrary\DeckLibrary.csproj" />
+	  <PackageReference Include="Spectre.Console" Version="0.51.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="starwars.flf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

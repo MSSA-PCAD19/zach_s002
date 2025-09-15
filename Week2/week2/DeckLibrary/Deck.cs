@@ -14,12 +14,12 @@ namespace DeckLibrary
             //if (newDeck.Length < v) throw new ArgumentException($"there are only {newDeck.Length} cards left.");
             string[] result = deck[0..v];
             string[] newDeck = new string[deck.Length - v];
-            Array.Copy(deck, v, newDeck, 0, v);
+            Array.Copy(deck, v, newDeck, 0, 52-v); // this was a bug previously, was v vs 52 - v
             deck = newDeck;
             return result;
             //return (newDeck[0..v]);
         }
-        public static string[] ChooseRandom5(string[] cards)
+        public static string[] MyChooseRandom5(string[] cards)
         {
             Random rng = new Random();
             string[] random5 = new string[5];
@@ -42,6 +42,25 @@ namespace DeckLibrary
         }
 
         public static string[] GetDeck()
+        {
+            string[] cards = new string[52];
+            int index = 0;
+            // Suits: Spades (A), Hearts (B), Diamonds (C), Clubs (D)
+            char[] suits = { '\u2660', '\u2665', '\u2666', '\u2663' };
+
+            // Ranks: A, 2–10, J, Q, K (Unicode skips 0x0C)
+            string[] ranks = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+
+            foreach (char suit in suits)
+            {
+                foreach (string rank in ranks)
+                {
+                    cards[index++] = suit + rank;
+                }
+            }
+            return cards;
+        }
+        public static string[] MyGetDeck()
         {
             return ["\U0001F0A1", "\U0001F0A2", "\U0001F0A3", "\U0001F0A4", "\U0001F0A5", "\U0001F0A6", "\U0001F0A7", "\U0001F0A8", "\U0001F0A9", "\U0001F0AA", "\U0001F0AB",
                     "\U0001F0AD","\U0001F0AE","\U0001F0B1", "\U0001F0B2", "\U0001F0B3", "\U0001F0B4", "\U0001F0B5", "\U0001F0B6", "\U0001F0B7", "\U0001F0B8", "\U0001F0B9", "\U0001F0BA", "\U0001F0BB",

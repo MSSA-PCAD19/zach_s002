@@ -64,4 +64,17 @@ public class ReturnTest
         return (x, y, inputTuple.Item2, inputTuple.Item1);
         // returning tuple reduces the need to create DTO (data transfer object) type.
     }
+
+    [TestMethod]
+
+    public void JaggedArray()
+    {
+        int[][] jagged = new int[3][];
+        jagged[0] = new int[5];
+        jagged[1] = new int[3];
+        jagged[2] = new int[4];
+
+        Assert.AreEqual(5, jagged[0].Length);
+        Assert.AreEqual(3, jagged.Length);
+    }
 }
