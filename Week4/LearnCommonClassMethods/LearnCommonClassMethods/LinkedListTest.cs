@@ -44,6 +44,38 @@ public class LinkedListTest
         // finding a node involves linear search
     }
 
+    [TestMethod]
+    public void ReverseLinkedListChallenge()
+    {
+        // can not use stack
+        // can not duplicate LinkedListNode
+        // can not create a wrapper
+
+        LinkedList<string> starterList = new LinkedList<string>(["apple", "banana", "cherry", "pear"]);
+
+
+        // my attempt
+        // do something
+
+        LinkedList<string> starterListReversed = new LinkedList<string>([]);
+
+        for (int i = (starterList.Count - 1); i >= 0;  i++)
+        {
+            if (starterList.Last is not null)
+            {
+                starterListReversed.AddLast(starterList.Last.Value);
+                starterList.RemoveLast();
+            }
+        }
+
+        // First == pear
+        // Last == apple
+        Debug.Print(starterListReversed.First.Value);
+        Assert.AreEqual("pear", starterListReversed.First!.Value);
+        Assert.AreEqual("apple", starterListReversed.Last!.Value);
+
+    }
+
 
     private void PrintList<T>(LinkedList<T> theList)
     {
@@ -57,6 +89,23 @@ public class LinkedListTest
             aNode = aNode.Next!;
         }
     }
+
+    [TestMethod]
+    private void PersonTest()
+    {
+        Person bob = new Person { Age = 35, Name = "bob" };
+        Person alice = new Person { Age = 45, Name = "alice" };
+
+    }
+}
+
+
+
+class Person
+{
+    public int Age;
+    public string Name;
+    public string Greeting() => $"My name is {this.Name}, I am {Age} old. How you doing?";
 }
 
 
