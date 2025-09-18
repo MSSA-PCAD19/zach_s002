@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
+using System.IO.Compression;
 
 namespace LearnCommonClassMethods;
 
@@ -11,14 +12,15 @@ public class LearnIO
     [TestMethod]
     public void SizeOfThings()
     {
-        Assert.AreEqual(4,sizeof(int));
+        Assert.AreEqual(4, sizeof(int));
         Assert.AreEqual(8, sizeof(long));
         byte[] byteArray = new byte[1024 * 1024];
-        Assert.AreEqual(1024*1024, byteArray.Length);
+        Assert.AreEqual(1024 * 1024, byteArray.Length);
         // the actual smallest unit in C# is a single byte
 
-        HashAlgorithm hasher = MD5.Create(); // message digest version 5, now not used for cryptography but still used for integrity
-        
+        HashAlgorithm hasher = MD5.Create(); // or SHA3_512.Create(), or SHA1.Create()
+                                             // message digest version 5, now not used for cryptography but still used for integrity
+
         byte[] greeting = Encoding.UTF8.GetBytes("HelloWorld"); // regardles of size of source file, the hash is always the same size
         byte[] thumbprint = hasher.ComputeHash(greeting);
         Debug.WriteLine(BitConverter.ToString(thumbprint));
@@ -83,7 +85,7 @@ public class LearnIO
 
         if (aStream.CanSeek) aStream.Position = 50;
 
-        byte[] buffer = new byte[10*1024*1024]; // create 10 MB bufer
+        byte[] buffer = new byte[10 * 1024 * 1024]; // create 10 MB bufer
         while (aStream.Position < aStream.Length)
         {
             aStream.ReadExactly(buffer, 0, (int)Math.Min(buffer.Length, aStream.Length - aStream.Position)); // scoop up 10MB at a time
@@ -130,5 +132,41 @@ public class LearnIO
         // Stream Reader/Writer provide text writing helper methods
         //StreamReader
         //StreamWriter
+    }
+
+    [TestMethod]
+    public void StreamReaderWriterToCompressedFileStream()
+    {
+        string textFileName = "textRW.txt";
+        string compressedFileName = "textRW.bin";
+
+        string directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+        string textFilePath = Path.Combine(directory, textFileName);
+        string compressedFilePath = Path.Combine(directory, compressedFileName);
+
+        Stream textStream = new FileStream(textFilePath, FileMode.OpenOrCreate);
+        Stream compressedStream = 
+            new GZipStream(
+                new FileStream(compressedFilePath, FileMode.OpenOrCreate),
+                CompressionLevel.SmallestSize); // wraps normal file based stream inside of compression stream
+        
+        StreamWriter textWriter = new StreamWriter(textStream);
+        StreamWriter zipWriter = new StreamWriter(compressedStream);
+
+        for (int i = 0; i < 100000; i++)
+        {
+            string line = $"Hello World -- {i}";
+            textWriter.WriteLine(line);
+            zipWriter.WriteLine(line);
+        }
+        Debug.Write($"file size: {textStream.Length} bytes");
+        textStream.Close();
+
+        //Debug.Write($"compressed size: {compressedStream.Length} bytes");
+        compressedStream.Close();
+
+        // Higher compression uses a bigger dictionary (bigger meaning # of entries)
+
     }
 }
